@@ -147,6 +147,16 @@
 </template>
 
 <script>
+const commentTypes = [
+  'post',
+  'image',
+  'score',
+  'video',
+  'question',
+  'answer',
+  'role'
+]
+
 export default {
   name: 'QuickText',
   methods: {
@@ -215,7 +225,7 @@ export default {
             this.$toast.error('错误的格式')
             return
           }
-          if (this.types.indexOf(data[0]) === -1) {
+          if (commentTypes.indexOf(data[0]) === -1) {
             this.$toast.error('错误的类型')
             return
           }
@@ -241,7 +251,7 @@ export default {
             this.$toast.error('错误的格式')
             return
           }
-          if (this.types.indexOf(data[0]) === -1) {
+          if (commentTypes.indexOf(data[0]) === -1) {
             this.$toast.error('错误的类型')
             return
           }

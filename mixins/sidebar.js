@@ -63,9 +63,7 @@ export default {
       if (title === 'dashboard') {
         return true
       }
-      const list = {
-        'bangumi-manager': '访问设置版主'
-      }
+      const list = {}
       const must = {
         'blacklist-words': '查看敏感词库',
         log: '审核员管理人',
