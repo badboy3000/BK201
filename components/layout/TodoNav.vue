@@ -76,10 +76,64 @@ export default {
     mapTodo(name, key) {
       const list = [
         {
-          name: 'feedback',
-          label: '用户反馈',
-          level: 0,
-          link: '/user/feedback/'
+          name: 'users',
+          label: '用户',
+          level: 2,
+          link: '/trial/user/process_1/'
+        },
+        {
+          name: 'posts',
+          label: '帖子',
+          level: 4,
+          link: '/trial/post/process_1/'
+        },
+        {
+          name: 'images',
+          label: '图片',
+          level: 3,
+          link: '/trial/image/process_1/'
+        },
+        {
+          name: 'comments',
+          label: '评论',
+          level: 2,
+          link: '/trial/comment/process_1/'
+        },
+        {
+          name: 'bangumi',
+          label: '番剧',
+          level: 1,
+          link: '/edit/bangumi/'
+        },
+        {
+          name: 'role',
+          label: '偶像',
+          level: 1,
+          link: '/edit/role/'
+        },
+        {
+          name: 'score',
+          label: '漫评',
+          level: 3,
+          link: '/trial/review/process_1/'
+        },
+        {
+          name: 'question',
+          label: '提问',
+          level: 3,
+          link: '/trial/question/process_1/'
+        },
+        {
+          name: 'answer',
+          label: '回答',
+          level: 3,
+          link: '/trial/answer/process_1/'
+        },
+        {
+          name: 'report',
+          label: '举报',
+          level: 4,
+          link: '/report/list/'
         }
       ]
       return list.filter(_ => _.name === name)[0][key]

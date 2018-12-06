@@ -41,7 +41,7 @@ export const actions = {
     })
   },
   async getTodo({ commit }) {
-    const data = await this.$axios.$get('admin/console_todo')
+    const data = await this.$axios.$get('admin/trial_todo')
     commit('SET_TODO', data)
   }
 }

@@ -25,3 +25,21 @@
   height: 100%;
 }
 
+%breakWord {
+  word-break: break-word !important;
+  word-break: break-all;
+}
+
+%clearfix {
+  &:after {
+    content: '';
+    clear: both;
+    display: table;
+  }
+
+  &:before {
+    content: '';
+    clear: both;
+    display: table;
+  }
+}

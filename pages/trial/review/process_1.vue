@@ -1,24 +1,148 @@
 <style lang="scss">
+#trial-review-process-1 {
+  margin: 0 auto;
+  max-width: 650px;
+
+  .el-card {
+    margin-bottom: 30px;
+
+    .title {
+      padding: 15px;
+      display: block;
+      font-weight: bold;
+      font-size: 15px;
+      border-bottom: 1px solid $color-gray-normal;
+    }
+
+    img {
+      max-width: 100%;
+    }
+
+    .control {
+      padding: 15px;
+      background-color: $color-gray-light;
+    }
+
+    .json-content-txt-parser {
+      margin-left: 15px;
+      margin-right: 15px;
+      margin-top: 15px;
+    }
+  }
+}
 </style>
 
 <template>
-  <div id="trial-review-process-1">
-    漫评审核，第一轮
+  <div
+    v-loading="loading"
+    id="trial-review-process-1"
+  >
+    <el-col
+      v-for="(item, index) in list"
+      :key="item.id"
+    >
+      <el-card :body-style="{ padding: '0px' }">
+        <a
+          :href="$alias.score(item.id)"
+          class="title"
+          target="_blank"
+          v-text="item.title"
+        />
+        <json-content :content="item.content"/>
+        <div class="control">
+          <div class="bottom clearfix">
+            <template v-if="item.deleted_at">
+              <el-button
+                type="success"
+                size="mini"
+                @click="approve(item.id, index)"
+              >确认删除</el-button>
+              <el-button
+                type="success"
+                size="mini"
+                @click="reject(item.id, index)"
+              >恢复漫评</el-button>
+            </template>
+            <template v-else>
+              <el-button
+                type="success"
+                size="mini"
+                @click="pass(item.id, index)"
+              >通过</el-button>
+              <el-button
+                type="danger"
+                size="mini"
+                @click="ban(item.id, index)"
+              >删除</el-button>
+            </template>
+            <router-link
+              :to="`/admin/user/show?id=${item.user_id}`"
+              style="margin-left: 10px"
+            >
+              <el-button
+                type="primary"
+                size="mini"
+              >查看用户</el-button>
+            </router-link>
+          </div>
+        </div>
+      </el-card>
+    </el-col>
   </div>
 </template>
 
 <script>
+import JsonContent from '~/components/jsonEditor/JsonContent'
+
 export default {
-  name: 'TrailReviewProcess1',
-  components: {},
-  props: {},
-  data() {
-    return {}
+  components: {
+    JsonContent
   },
-  computed: {},
-  watch: {},
-  created() {},
-  mounted() {},
-  methods: {}
+  data() {
+    return {
+      list: [],
+      loading: true
+    }
+  },
+  created() {
+    this.getData()
+  },
+  methods: {
+    getData() {
+      this.$axios
+        .$get('admin/trial/score/list')
+        .then(data => {
+          this.list = data
+          this.loading = false
+        })
+        .catch(() => {
+          this.loading = false
+        })
+    },
+    ban(id, index) {
+      this.$axios.$post('admin/trial/score/ban', { id }).then(() => {
+        this.list.splice(index, 1)
+        this.$toast.success('操作成功')
+      })
+    },
+    pass(id, index) {
+      this.$axios.$post('admin/trial/score/pass', { id }).then(() => {
+        this.list.splice(index, 1)
+        this.$toast.success('操作成功')
+      })
+    },
+    approve(id, index) {
+      this.$axios.$post('admin/trial/score/approve', { id }).then(() => {
+        this.list.splice(index, 1)
+        this.$toast.success('操作成功')
+      })
+    },
+    reject(id, index) {
+      this.$axios.$post('admin/trial/score/reject', { id }).then(() => {
+        this.list.splice(index, 1)
+        this.$toast.success('操作成功')
+      })
+    }
+  }
 }
 </script>
