@@ -100,28 +100,28 @@
             <el-button
               size="small"
               type="danger"
-              @click="approve(item.id, index)"
+              @click="submit('approve', item.id, index)"
             >确认删除</el-button>
             <el-button
               size="small"
               type="success"
-              @click="reject(item.id, index)"
+              @click="submit('reject', item.id, index)"
             >恢复提问</el-button>
           </template>
           <template v-else>
             <el-button
               size="small"
               type="success"
-              @click="pass(item.id, index)"
+              @click="submit('pass', item.id, index)"
             >通过</el-button>
             <el-button
               size="small"
               type="danger"
-              @click="ban(item.id, index)"
+              @click="submit('ban', item.id, index)"
             >删除</el-button>
           </template>
           <router-link
-            :to="`/admin/user/show?id=${item.user_id}`"
+            :to="`/quick/user/?id=${item.user_id}`"
             style="margin-left: 10px;margin-right: 10px"
           >
             <el-button
@@ -158,28 +158,12 @@ export default {
           this.loading = false
         })
     },
-    ban(id, index) {
-      this.$axios.$post('admin/trial/question/ban', { id }).then(() => {
+    submit(type, id, index) {
+      this.$axios.$post(`admin/trial/question/${type}`, { id }).then(() => {
         this.list.splice(index, 1)
-        this.$toast.success('操作成功')
-      })
-    },
-    pass(id, index) {
-      this.$axios.$post('admin/trial/question/pass', { id }).then(() => {
-        this.list.splice(index, 1)
-        this.$toast.success('操作成功')
-      })
-    },
-    approve(id, index) {
-      this.$axios.$post('admin/trial/question/approve', { id }).then(() => {
-        this.list.splice(index, 1)
-        this.$toast.success('操作成功')
-      })
-    },
-    reject(id, index) {
-      this.$axios.$post('admin/trial/question/reject', { id }).then(() => {
-        this.list.splice(index, 1)
-        this.$toast.success('操作成功')
+        this.$store.commit('CHANGE_TODO', {
+          key: 'question'
+        })
       })
     }
   }

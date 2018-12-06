@@ -28,8 +28,8 @@
   }
 
   .level-1 {
-    background-color: #42b983;
-    border-color: #42b983;
+    background-color: #67c23a;
+    border-color: #67c23a;
   }
 
   .level-2 {

@@ -288,7 +288,7 @@ export default {
         prefix = 'pin'
       }
       if (prefix === 'user') {
-        return `/admin/user/show?id=${id}`
+        return `/quick/user/?id=${id}`
       }
       return `/${prefix}/${id}${tail}`
     },
@@ -322,7 +322,6 @@ export default {
           (this.pageState.cur - 1) * this.pageState.size + index,
           1
         )
-        this.$toast.success('操作成功')
       })
     },
     async detail(data) {

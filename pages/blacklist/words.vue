@@ -108,7 +108,6 @@ export default {
       this.$axios
         .$post('admin/trial/words/delete', { words: [tag] })
         .then(() => {
-          this.$toast.success('操作成功')
           this.pageList.splice(
             (this.pageState - 1) * this.pageState.size + index,
             1
@@ -142,7 +141,6 @@ export default {
         } else {
           this.pageList = words.concat(this.pageList)
         }
-        this.$toast.success('操作成功')
         this.showModal = false
       } catch (e) {
         this.$toast.error(e)

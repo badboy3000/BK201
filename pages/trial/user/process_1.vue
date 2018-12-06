@@ -79,7 +79,7 @@
               type="success"
               @click="passUser(scope.$index, scope.row.id)"
             >通过</el-button>
-            <router-link :to="`/admin/user/show?zone=${scope.row.zone}`">
+            <router-link :to="`/quick/user/?zone=${scope.row.zone}`">
               <el-button
                 size="small"
                 type="primary"
@@ -141,6 +141,9 @@ export default {
     passUser(index, id) {
       this.$axios.$post('admin/trial/user/pass', { id }).then(() => {
         this.list.splice(index, 1)
+        this.$store.commit('CHANGE_TODO', {
+          key: 'users'
+        })
       })
     },
     delUser(index, id) {
@@ -152,6 +155,9 @@ export default {
         .then(() => {
           this.$axios.$post('admin/trial/user/ban', { id }).then(() => {
             this.list.splice(index, 1)
+            this.$store.commit('CHANGE_TODO', {
+              key: 'users'
+            })
           })
         })
         .catch(() => {})

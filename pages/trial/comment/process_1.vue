@@ -169,7 +169,7 @@
             >删除</el-button>
           </template>
           <router-link
-            :to="`/admin/user/show?id=${scope.row.user_id}`"
+            :to="`/quick/user/?id=${scope.row.user_id}`"
             style="margin-left: 10px"
           >
             <el-button
@@ -246,42 +246,6 @@ export default {
         return []
       }
     },
-    passComment(item, index) {
-      this.$axios
-        .$post('admin/trial/comment/pass', { id: item.id, type: item.type })
-        .then(() => {
-          this.$message.success('操作成功')
-          this.list.splice(index, 1)
-        })
-    },
-    approveComment(item, index) {
-      this.$axios
-        .$post('admin/trial/comment/approve', { id: item.id, type: item.type })
-        .then(() => {
-          this.$message.success('操作成功')
-          this.list.splice(index, 1)
-        })
-    },
-    rejectComment(item, index) {
-      this.$axios
-        .$post('admin/trial/comment/reject', {
-          id: item.id,
-          type: item.type,
-          parent_id: item.parent_id
-        })
-        .then(() => {
-          this.$message.success('操作成功')
-          this.list.splice(index, 1)
-        })
-    },
-    deleteComment(item, index) {
-      this.$axios
-        .$post('admin/trial/comment/ban', { id: item.id, type: item.type })
-        .then(() => {
-          this.$message.success('操作成功')
-          this.list.splice(index, 1)
-        })
-    },
     computeArea(type) {
       switch (type) {
         case 'post':
@@ -308,6 +272,50 @@ export default {
       }
       return type
     },
+    passComment(item, index) {
+      this.$axios
+        .$post('admin/trial/comment/pass', { id: item.id, type: item.type })
+        .then(() => {
+          this.list.splice(index, 1)
+          this.$store.commit('CHANGE_TODO', {
+            key: 'comments'
+          })
+        })
+    },
+    approveComment(item, index) {
+      this.$axios
+        .$post('admin/trial/comment/approve', { id: item.id, type: item.type })
+        .then(() => {
+          this.list.splice(index, 1)
+          this.$store.commit('CHANGE_TODO', {
+            key: 'comments'
+          })
+        })
+    },
+    rejectComment(item, index) {
+      this.$axios
+        .$post('admin/trial/comment/reject', {
+          id: item.id,
+          type: item.type,
+          parent_id: item.parent_id
+        })
+        .then(() => {
+          this.list.splice(index, 1)
+          this.$store.commit('CHANGE_TODO', {
+            key: 'comments'
+          })
+        })
+    },
+    deleteComment(item, index) {
+      this.$axios
+        .$post('admin/trial/comment/ban', { id: item.id, type: item.type })
+        .then(() => {
+          this.list.splice(index, 1)
+          this.$store.commit('CHANGE_TODO', {
+            key: 'comments'
+          })
+        })
+    },
     batchPass() {
       if (this.batching || !this.list.length) {
         return
@@ -330,7 +338,10 @@ export default {
         })
         .then(() => {
           this.batching = false
-          this.$message.success('操作成功')
+          this.$store.commit('CHANGE_TODO', {
+            key: 'comments',
+            value: this.list.length
+          })
           this.getData()
         })
         .catch(() => {

@@ -132,28 +132,28 @@
             <el-button
               size="small"
               type="danger"
-              @click="approvePost(index, item.id)"
+              @click="submit('approve', index, item.id)"
             >确认删除</el-button>
             <el-button
               size="small"
               type="success"
-              @click="rejectPost(index, item.id)"
+              @click="submit('reject', index, item.id)"
             >恢复帖子</el-button>
           </template>
           <template v-else>
             <el-button
               size="small"
               type="success"
-              @click="passPost(index, item.id)"
+              @click="submit('pass', index, item.id)"
             >通过</el-button>
             <el-button
               size="small"
               type="danger"
-              @click="delPost(index, item.id)"
+              @click="submit('ban', index, item.id)"
             >删帖</el-button>
           </template>
           <router-link
-            :to="`/admin/user/show?zone=${item.user.zone}`"
+            :to="`/quick/user/?zone=${item.user.zone}`"
             style="margin-left: 10px;margin-right: 10px"
           >
             <el-button
@@ -179,7 +179,7 @@
           </a>
           <a
             v-if="computePostState(item) === '吧务已删除'"
-            :href="`/admin/user/show?id=${item.state}`"
+            :href="`/quick/user/?id=${item.state}`"
             target="_blank"
             style="margin-left: 10px;margin-right: 10px"
           >
@@ -222,37 +222,11 @@ export default {
         window.open(item.url)
       })
     },
-    delPost(index, id) {
-      this.$confirm('确定删除吗?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      })
-        .then(() => {
-          this.$axios.$post('admin/trial/post/ban', { id }).then(() => {
-            this.list.splice(index, 1)
-            this.$toast.success('操作成功')
-          })
-        })
-        .catch(() => {})
-    },
-    passPost(index, id) {
-      this.$axios.$post('admin/trial/post/pass', { id }).then(() => {
+    submit(type, index, id) {
+      this.$axios.$post(`admin/trial/post/${type}`, { id }).then(() => {
         this.list.splice(index, 1)
-        this.$toast.success('操作成功')
-      })
-    },
-    approvePost(index, id) {
-      this.$axios.$post('admin/trial/post/approve', { id }).then(() => {
-        this.list.splice(index, 1)
-        this.$toast.success('操作成功')
-      })
-    },
-    rejectPost(index, id) {
-      this.$axios.$post('admin/trial/post/reject', { id }).then(() => {
-        this.list.splice(index, 1)
-        this.$channel.$emit('admin-trial-do', {
-          type: 'posts'
+        this.$store.commit('CHANGE_TODO', {
+          key: 'posts'
         })
       })
     },
@@ -260,20 +234,11 @@ export default {
       if (!url) {
         return
       }
-      this.$confirm('确定删除吗?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      })
+      this.$axios
+        .$post('admin/trial/post/delete_image', { id, url })
         .then(() => {
-          this.$axios
-            .$post('admin/trial/post/delete_image', { id, url })
-            .then(() => {
-              this.list[index].images.splice(subIndex, 1)
-              this.$toast.success('操作成功')
-            })
+          this.list[index].images.splice(subIndex, 1)
         })
-        .catch(() => {})
     },
     computePostState(post) {
       const userId = parseInt(post.user_id, 10)

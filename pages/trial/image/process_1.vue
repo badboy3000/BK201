@@ -76,28 +76,28 @@
               <el-button
                 type="danger"
                 size="mini"
-                @click="approveImage(image, index)"
+                @click="submit('approve', image, index)"
               >确认删除</el-button>
               <el-button
                 type="success"
                 size="mini"
-                @click="rejectImage(image, index)"
+                @click="submit('reject', image, index)"
               >恢复图片</el-button>
             </template>
             <template v-else>
               <el-button
                 type="success"
                 size="mini"
-                @click="passImage(image, index)"
+                @click="submit('pass', image, index)"
               >通过</el-button>
               <el-button
                 type="danger"
                 size="mini"
-                @click="deleteImage(image, index)"
+                @click="submit('ban', image, index)"
               >删除</el-button>
             </template>
             <router-link
-              :to="`/admin/user/show?id=${image.user_id}`"
+              :to="`/quick/user/?id=${image.user_id}`"
               style="margin-left: 10px"
             >
               <el-button
@@ -141,52 +141,17 @@ export default {
           this.loading = false
         })
     },
-    deleteImage(image, index) {
-      this.$confirm('确定要删除吗?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      })
-        .then(() => {
-          this.$axios
-            .$post('admin/trial/image/ban', {
-              id: image.id,
-              type: image.bangumi_id ? 'album' : 'image'
-            })
-            .then(() => {
-              this.list.splice(index, 1)
-            })
-        })
-        .catch(() => {})
-    },
-    passImage(image, index) {
+    submit(type, image, index) {
       this.$axios
-        .$post('admin/trial/image/pass', {
+        .$post(`admin/trial/image/${type}`, {
           id: image.id,
           type: image.bangumi_id ? 'album' : 'image'
         })
         .then(() => {
           this.list.splice(index, 1)
-        })
-    },
-    approveImage(image, index) {
-      this.$axios
-        .$post('admin/trial/image/approve', {
-          id: image.id,
-          type: image.bangumi_id ? 'album' : 'image'
-        })
-        .then(() => {
-          this.list.splice(index, 1)
-        })
-    },
-    rejectImage(image, index) {
-      this.$axios
-        .$post('admin/trial/image/reject', {
-          id: image.id,
-          type: image.bangumi_id ? 'album' : 'image'
-        })
-        .then(() => {
-          this.list.splice(index, 1)
+          this.$store.commit('CHANGE_TODO', {
+            key: 'images'
+          })
         })
     }
   }
