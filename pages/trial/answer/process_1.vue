@@ -120,7 +120,7 @@ export default {
         })
     },
     submit(type, id, index) {
-      this.$axos.$post(`admin/trial/answer/${type}`, { id }).then(() => {
+      this.$axios.$post(`admin/trial/answer/${type}`, { id }).then(() => {
         this.list.splice(index, 1)
         this.$store.commit('CHANGE_TODO', {
           key: 'answer'

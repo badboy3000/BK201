@@ -291,7 +291,7 @@ export default {
         this.$router.push(`/quick/user/?id=${id}`)
         return 'javascript:;'
       }
-      return `/${prefix}/${id}${tail}`
+      return `https://www.calibur.tv/${prefix}/${id}${tail}`
     },
     computeUserId(item) {
       return item.split('|')[0]
