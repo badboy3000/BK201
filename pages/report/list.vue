@@ -288,7 +288,8 @@ export default {
         prefix = 'pin'
       }
       if (prefix === 'user') {
-        return `/quick/user/?id=${id}`
+        this.$router.push(`/quick/user/?id=${id}`)
+        return 'javascript:;'
       }
       return `/${prefix}/${id}${tail}`
     },
@@ -322,6 +323,9 @@ export default {
           (this.pageState.cur - 1) * this.pageState.size + index,
           1
         )
+        this.$store.commit('CHANGE_TODO', {
+          key: 'report'
+        })
       })
     },
     async detail(data) {
